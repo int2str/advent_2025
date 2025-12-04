@@ -1,0 +1,11 @@
+[package]
+name = "day_02"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = []
+private = []
+benchmark = []
+
+[dependencies]
