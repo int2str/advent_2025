@@ -6,6 +6,5 @@ edition = "2024"
 [features]
 default = []
 private = []
-benchmark = []
 
 [dependencies]
