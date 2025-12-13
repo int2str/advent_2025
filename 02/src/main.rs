@@ -1,13 +1,7 @@
 #![allow(dead_code)]
 
-use std::fs::File;
-use std::io::{BufRead, BufReader, Lines, Result};
+use std::io::Result;
 use std::path::Path;
-
-fn file_lines<P: AsRef<Path>>(filename: P) -> Result<Lines<BufReader<File>>> {
-    let file = File::open(filename)?;
-    Ok(BufReader::new(file).lines())
-}
 
 fn is_repeat_twice(n: &u64) -> bool {
     let ns = n.to_string();
@@ -32,9 +26,10 @@ fn is_repeat_n(n: &u64) -> bool {
 }
 
 fn invalid_id_sum<P: AsRef<Path>>(filename: P, filter_predicate: fn(&u64) -> bool) -> Result<u64> {
-    Ok(file_lines(filename)?
+    Ok(std::fs::read_to_string(filename)?
+        .lines()
         .next()
-        .unwrap()?
+        .unwrap()
         .split(',')
         .flat_map(|product_id| {
             let (a, b) = product_id.split_once('-').unwrap();

@@ -1,20 +1,14 @@
 #![allow(dead_code)]
 
-use std::fs::File;
-use std::io::{BufRead, BufReader, Lines, Result};
+use std::io::Result;
 use std::path::Path;
-
-fn file_lines<P: AsRef<Path>>(filename: P) -> Result<Lines<BufReader<File>>> {
-    let file = File::open(filename)?;
-    Ok(BufReader::new(file).lines())
-}
 
 fn decode<P: AsRef<Path>>(path: P) -> Result<(i32, i32)> {
     // PERFORMANCE(AE): I'm sure (***), combining map() calls would be faster here.
     // But leaving individual map() calls here for clarity. Until performance becomes
     // an issue ;).
-    let (zeros, turns, _) = file_lines(path)?
-        .map(|line| line.unwrap())
+    let (zeros, turns, _) = std::fs::read_to_string(path)?
+        .lines()
         // Extract number
         .map(|line| line[1..].parse::<i32>().unwrap() * if line.starts_with('L') { -1 } else { 1 })
         // Calculate full rotations and remaining steps
