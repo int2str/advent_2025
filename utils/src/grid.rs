@@ -93,6 +93,24 @@ impl<T> Grid<T> {
     pub fn coordinates(&self) -> impl Iterator<Item = (usize, usize)> {
         (0..self.height).flat_map(|y| (0..self.width).map(move |x| (x, y)))
     }
+
+    pub fn coordinates_rev(&self) -> impl Iterator<Item = (usize, usize)> {
+        let width = self.width;
+        (0..self.height)
+            .rev()
+            .flat_map(move |y| (0..width).map(move |x| (x, y)))
+    }
+
+    pub fn find(&self, what: T) -> Option<(usize, usize)>
+    where
+        T: PartialEq,
+    {
+        self.data
+            .iter()
+            .enumerate()
+            .find(|(_, value)| **value == what)
+            .map(|(idx, _)| (idx % self.width, idx / self.height))
+    }
 }
 
 impl std::fmt::Debug for Grid<char> {
